@@ -3,4 +3,4 @@ cd supy-minimal-example
 git clone git://github.com/elaird/supy                  # checkout supy dependence
 export PYTHONPATH=$PYTHONPATH:`pwd`                     # add directory containing supy to your python path
 export PATH=$PATH:`pwd`/supy/bin                        # optionally add to your path
-supy example_analyses.py --loop 1                       # run the example (the example input files are located on AFS)
+supy example_analysis.py --loop 1                       # run the example (the example input files are located on AFS)
