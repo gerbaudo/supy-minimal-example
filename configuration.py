@@ -4,4 +4,4 @@ def mainTree() :
     return ("susyTree","tree")
 
 def leavesToBlackList() :
-    return ['L1triggered', 'triggered']
+    return ['L1triggered', 'triggered', 'DCSBits']
