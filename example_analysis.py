@@ -1,32 +1,35 @@
+import calculable_example
 import supy
 import ROOT as r
 
 
 class example_analysis(supy.analysis):
     def listOfSteps(self, config):
+        sshv = supy.steps.histos.value
         return [supy.steps.printer.progressPrinter(),
-                supy.steps.histos.value('run', 20, 0, 1e4),
-                supy.steps.histos.value('bx', 3564, 0., 3564.),
-                supy.steps.histos.value('Two', 10, 0, 10),
+                sshv('run', 20, 0, 1e4),
+                sshv('bx', 3564, 0., 3564.),
+                sshv('Two', 10, 0, 10),
+                sshv('nTracksV0',50+1, -0.5, +50.5),
+                supy.calculables.other.Ratio("nTracksV0", binning = (50+1,-0.5,50.5),
+                                             thisSample = config['sample'], target = ('Data',[]),
+                                             groups = [('MC',[])]),
+                #supy.steps.printer.printstuff(['threeWeights']),
+                supy.steps.other.reweights(sshv('nTracksV0',50+1, -0.5, +50.5), 'threeWeights', 3),
                 ]
 
     def listOfCalculables(self, config):
         return (supy.calculables.zeroArgs(supy.calculables) +
-                [supy.calculables.other.fixedValue('Two', 2)]
+                [supy.calculables.other.fixedValue('Two', 2)] +
+                [calculable_example.nTracksV0(),
+                 calculable_example.threeWeights(),
+                 ]
                 )
 
     def listOfSampleDictionaries(self):
-        dir = "/afs/cern.ch/user/e/elaird/public/susypvt/framework_take3/"
         holder = supy.samples.SampleHolder()
-
-        holder.add("Data",
-                   '["%s/skimmed_900_GeV_Data.root"]' % dir,
-                   lumi=1.0e-5,  # /pb
-                   )
-        holder.add("MC",
-                   '["%s/skimmed_900_GeV_MC.root"]' % dir,
-                   xs=1.0e8,  # pb
-                   )
+        holder.add("Data", '["data/skimmed_900_GeV_Data.root"]', lumi=1.0e-5)  # /pb
+        holder.add("MC", '["data/skimmed_900_GeV_MC.root"]', xs=1.0e8)  # pb
         return [holder]
 
     def listOfSamples(self, config):
@@ -35,7 +38,8 @@ class example_analysis(supy.analysis):
                                      markerStyle=20) +
                 supy.samples.specify(names="MC",
                                      color=r.kRed,
-                                     effectiveLumi=0.5)
+                                     effectiveLumi=0.5,
+                                     weights='nTracksV0Ratio')
                 )
 
     def conclude(self, pars):
@@ -46,4 +50,5 @@ class example_analysis(supy.analysis):
                      pdfFileName=self.pdfFileName(org.tag),
                      samplesForRatios=("Data", "MC"),
                      sampleLabelsForRatios=("data", "sim"),
+                     detailedCalculables=True,
                      ).plotAll()
