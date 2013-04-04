@@ -27,17 +27,9 @@ class example_analysis(supy.analysis):
                 )
 
     def listOfSampleDictionaries(self):
-        dir = "data"
         holder = supy.samples.SampleHolder()
-
-        holder.add("Data",
-                   '["%s/skimmed_900_GeV_Data.root"]' % dir,
-                   lumi=1.0e-5,  # /pb
-                   )
-        holder.add("MC",
-                   '["%s/skimmed_900_GeV_MC.root"]' % dir,
-                   xs=1.0e8,  # pb
-                   )
+        holder.add("Data", '["data/skimmed_900_GeV_Data.root"]', lumi=1.0e-5)  # /pb
+        holder.add("MC", '["data/skimmed_900_GeV_MC.root"]', xs=1.0e8)  # pb
         return [holder]
 
     def listOfSamples(self, config):
