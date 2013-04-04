@@ -12,7 +12,8 @@ class example_analysis(supy.analysis):
                 sshv('Two', 10, 0, 10),
                 sshv('nTracksV0',50+1, -0.5, +50.5),
                 supy.calculables.other.Ratio("nTracksV0", binning = (50+1,-0.5,50.5),
-                                             thisSample = 'MC', target = ('Data',[])),
+                                             thisSample = config['sample'], target = ('Data',[]),
+                                             groups = [('MC',[])]),
                 #supy.steps.printer.printstuff(['threeWeights']),
                 supy.steps.other.reweights(sshv('nTracksV0',50+1, -0.5, +50.5), 'threeWeights', 3),
                 ]
