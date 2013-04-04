@@ -16,7 +16,7 @@ class example_analysis(supy.analysis):
                 )
 
     def listOfSampleDictionaries(self):
-        dir = "/afs/cern.ch/user/e/elaird/public/susypvt/framework_take3/"
+        dir = "data"
         holder = supy.samples.SampleHolder()
 
         holder.add("Data",
